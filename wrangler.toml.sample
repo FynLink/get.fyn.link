@@ -1,6 +1,9 @@
 name = "get-fyn-link"
 compatibility_date = "2023-12-01"
 
+[site]
+bucket = "./public"
+
 # [vars]
 # MY_VARIABLE = "production_value"
 
