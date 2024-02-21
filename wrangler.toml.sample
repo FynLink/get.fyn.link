@@ -1,5 +1,6 @@
 name = "get-fyn-link"
 compatibility_date = "2023-12-01"
+main = "src/index.ts"
 
 [site]
 bucket = "./public"

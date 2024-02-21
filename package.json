@@ -4,6 +4,8 @@
     "deploy": "wrangler deploy --minify src/index.ts"
   },
   "dependencies": {
+    "@twind/core": "^1.1.3",
+    "@twind/preset-tailwind": "^1.1.4",
     "hono": "^4.0.5"
   },
   "devDependencies": {
