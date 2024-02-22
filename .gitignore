@@ -2,6 +2,7 @@ node_modules
 dist
 .wrangler
 .dev.vars
+.staging.vars
 .idea
 wrangler.toml
 
