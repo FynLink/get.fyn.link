@@ -9,7 +9,7 @@ import { HtmlEscapedString } from 'hono/utils/html'
 import { createLink, getLink } from "./services/linkService";
 import { HTTPException } from "hono/http-exception";
 import { csrf } from "hono/csrf";
-import {html} from "hono/html";
+import { SafeMode } from "./pages/safemode";
 
 export type Env = {
     KV: KVNamespace
@@ -61,7 +61,7 @@ app.get('/', (c) => {
 })
 
 app.get('/:slug', async (c) => {
-    return c.redirect(await getLink(c))
+    return c.html(ssrTailwind(SafeMode(c, await getLink(c))))
 })
 
 export default app

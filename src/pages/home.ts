@@ -51,7 +51,8 @@ export const Home = html`<!doctype html>
             </div>
             <div class="hidden lg:flex lg:gap-x-12">
                 <a href="https://github.com/FynLink/get.fyn.link" class="text-sm font-semibold leading-6 text-gray-900">Source</a>
-                <a href="#" class="text-sm font-semibold leading-6 text-gray-900">Features</a>
+                <a href="#" class="text-sm font-semibold leading-6 text-gray-900">Terms</a>
+                <a href="#" class="text-sm font-semibold leading-6 text-gray-900">Privacy</a>
                 <a href="#" class="text-sm font-semibold leading-6 text-gray-900">About</a>
             </div>
             <div class="hidden lg:flex lg:flex-1 lg:justify-end">
@@ -83,7 +84,9 @@ export const Home = html`<!doctype html>
                             <a href="https://github.com/FynLink/get.fyn.link"
                                class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Source</a>
                             <a href="#"
-                               class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Features</a>
+                               class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Terms</a>
+                            <a href="#"
+                               class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Privacy</a>
                             <a href="#"
                                class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">About</a>
                         </div>
