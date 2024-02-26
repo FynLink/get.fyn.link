@@ -5,8 +5,8 @@ export const Home = html`<!doctype html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title></title>
-    <meta name="description" content="">
+    <title>The best free URL shortener | By Fynlink</title>
+    <meta name="description" content="Private & free URL shortener with QR code.">
 
     <meta property="og:title" content="">
     <meta property="og:type" content="">
@@ -33,13 +33,13 @@ export const Home = html`<!doctype html>
     <header class="absolute inset-x-0 top-0 z-50">
         <nav class="flex items-center justify-between p-6 lg:px-8" aria-label="Global">
             <div class="flex lg:flex-1">
-                <a href="#" class="-m-1.5 p-1.5">
+                <a href="/" class="-m-1.5 p-1.5">
                     <span class="sr-only">Get Fyn Link</span>
                     <img class="h-8 w-auto" src="/images/fyn.webp" alt="">
                 </a>
             </div>
             <div class="flex lg:hidden">
-                <button type="button"
+                <button onclick="openMobileMenu()" id="mobileMenuButton" type="button"
                         class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700">
                     <span class="sr-only">Open main menu</span>
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
@@ -60,7 +60,7 @@ export const Home = html`<!doctype html>
             </div>
         </nav>
         <!-- Mobile menu, show/hide based on menu open state. -->
-        <div class="lg:hidden" role="dialog" aria-modal="true">
+        <div id="mobileMenu" class="hidden" role="dialog" aria-modal="true">
             <!-- Background backdrop, show/hide based on slide-over state. -->
             <div class="fixed inset-0 z-50"></div>
             <div class="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
@@ -69,7 +69,7 @@ export const Home = html`<!doctype html>
                         <span class="sr-only">Get Fyn link</span>
                         <img class="h-8 w-auto" src="/images/fyn.webp" alt="">
                     </a>
-                    <button type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700">
+                    <button onclick="closeMobileMenu()" type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700">
                         <span class="sr-only">Close menu</span>
                         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                              aria-hidden="true">
@@ -103,7 +103,7 @@ export const Home = html`<!doctype html>
                  style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"></div>
         </div>
         <div class="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
-            <div class="hidden sm:mb-8 sm:flex sm:justify-center">
+            <div class="mb-12 sm:mb-8 sm:flex sm:justify-center">
                 <div class="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
                     Want more control for your short links? <a href="#" class="font-semibold text-indigo-600"><span
                         class="absolute inset-0" aria-hidden="true"></span>Learn more <span
@@ -114,16 +114,16 @@ export const Home = html`<!doctype html>
                 <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">The Best <span
                         class="relative font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-cyan-400">Free & Private </span>URL
                     shortener!</h1>
-                <p class="mt-6 text-lg leading-8 text-gray-600">This is a free & opensource service built with the same
-                    privacy features by the <a href="https://fyn.link" class="text-indigo-600">people at Fynlink</a>.
+                <p class="hidden sm:block mt-6 text-lg leading-8 text-gray-600">This is a free & open source service built with the same
+                    privacy features by the <a href="https://fyn.link" class="text-indigo-600">people at FynLink</a>.
                     All links created are <a
                             href="https://docs.fyn.link/help/private-link#how-is-a-private-link-stored-in-cache"
-                            class="text-indigo-600">private by default,</a> and will expire in 24 hours.</p>
+                            class="text-indigo-600">private by default,</a> & will expire in 24 hours.</p>
             </div>
-            <div class="mt-12 flex items-center justify-center">
-                <div class="max-w-md w-full">
+            <div class="mt-24 sm:mt-16 flex items-center justify-center">
+                <div class="max-w-lg w-full">
                     <div class="min-w-0 flex-1">
-                        <form id="targetUrlForm" data-hx-target="#resultDiv" data-hx-post="/url" >
+                        <form id="targetUrlForm" data-hx-target="#resultDiv" data-hx-post="/url">
                             <div class="border-b border-gray-200 focus-within:border-indigo-600">
                                 <label for="comment" class="sr-only">Target URL</label>
                                 <textarea rows="3" name="targetUrl" id="targetUrl"
@@ -168,63 +168,68 @@ export const Home = html`<!doctype html>
                                 <div class="px-4 py-5 sm:p-6">
                                     <div>
                                         <div class="rounded-md bg-gray-50 px-5 py-5 sm:flex sm:items-start sm:justify-between">
-                                            <h4 class="sr-only">Visa</h4>
+                                            <h4 class="sr-only">QR Code</h4>
                                             <div class="sm:flex sm:items-start">
-                                                <div id="qrcode" >
-                                                    
+                                                <div id="qrcode" class="cursor-pointer">
+
                                                 </div>
                                                 <div class="mt-3 sm:ml-4 sm:mt-0">
-                                                    <div id="resultDiv" data-hx-target="#resultDiv" class="text-sm font-medium text-indigo-600"></div>
-                                                    <div class="mt-1 text-xs text-gray-500 sm:flex sm:items-center">
-                                                        <div>Expire on <span id="expiry-time"></span></div>
+                                                    <div id="resultDiv" data-hx-target="#resultDiv"
+                                                         class="text-sm font-medium text-indigo-600"></div>
+                                                    <div class="mt-2 text-xs text-gray-500 sm:flex sm:items-center">
+                                                        <div>This link will expire on <span id="expiry-time"></span></div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="mt-4 sm:ml-6 sm:mt-0 sm:flex-shrink-0">
-                                                <button id="copyButton" type="button" class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Copy</button>
+                                                <button id="copyButton" type="button"
+                                                        class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                                                    Copy
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div onclick="resetForm()" class="text-gray-500 underline cursor-pointer text-sm mt-5 text-center">
-                                Create new short URL
+                            <div class="text-gray-500 underline cursor-pointer text-sm mt-5 text-center">
+                               <a href="/" >Create new short URL</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
-             aria-hidden="true">
-            <div class="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"
-                 style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"></div>
+            <div class="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-40rem)]"
+                 aria-hidden="true">
+                <div class="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"
+                     style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"></div>
+            </div>
         </div>
     </div>
+    <footer>
+        <div class="mx-auto max-w-7xl px-6 py-12 md:flex md:items-center md:justify-between lg:px-8">
+            <div class="flex justify-center space-x-6 md:order-2">
+                <a href="https://twitter.com/FynLinkHQ" class="text-gray-400 hover:text-gray-500">
+                    <span class="sr-only">X</span>
+                    <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M13.6823 10.6218L20.2391 3H18.6854L12.9921 9.61788L8.44486 3H3.2002L10.0765 13.0074L3.2002 21H4.75404L10.7663 14.0113L15.5685 21H20.8131L13.6819 10.6218H13.6823ZM11.5541 13.0956L10.8574 12.0991L5.31391 4.16971H7.70053L12.1742 10.5689L12.8709 11.5655L18.6861 19.8835H16.2995L11.5541 13.096V13.0956Z"/>
+                    </svg>
+                </a>
+                <a href="https://github.com/FynLink" class="text-gray-400 hover:text-gray-500">
+                    <span class="sr-only">GitHub</span>
+                    <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path fill-rule="evenodd"
+                              d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
+                              clip-rule="evenodd"/>
+                    </svg>
+                </a>
+            </div>
+            <div class="mt-8 md:order-1 md:mt-0">
+                <p class="text-center text-xs leading-5 text-gray-500">&copy; ${new Date().getFullYear()} FynLink, LLC.
+                    All
+                    rights reserved.</p>
+            </div>
+        </div>
+    </footer>
 </div>
-<footer class="bg-white">
-    <div class="mx-auto max-w-7xl px-6 py-12 md:flex md:items-center md:justify-between lg:px-8">
-        <div class="flex justify-center space-x-6 md:order-2">
-            <a href="https://twitter.com/FynLinkHQ" class="text-gray-400 hover:text-gray-500">
-                <span class="sr-only">X</span>
-                <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M13.6823 10.6218L20.2391 3H18.6854L12.9921 9.61788L8.44486 3H3.2002L10.0765 13.0074L3.2002 21H4.75404L10.7663 14.0113L15.5685 21H20.8131L13.6819 10.6218H13.6823ZM11.5541 13.0956L10.8574 12.0991L5.31391 4.16971H7.70053L12.1742 10.5689L12.8709 11.5655L18.6861 19.8835H16.2995L11.5541 13.096V13.0956Z"/>
-                </svg>
-            </a>
-            <a href="https://github.com/FynLink" class="text-gray-400 hover:text-gray-500">
-                <span class="sr-only">GitHub</span>
-                <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path fill-rule="evenodd"
-                          d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
-                          clip-rule="evenodd"/>
-                </svg>
-            </a>
-        </div>
-        <div class="mt-8 md:order-1 md:mt-0">
-            <p class="text-center text-xs leading-5 text-gray-500">&copy; ${new Date().getFullYear()} Fynlink, LLC. All
-                rights reserved.</p>
-        </div>
-    </div>
-</footer>
 </body>
 </html>`

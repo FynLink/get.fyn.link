@@ -1,6 +1,4 @@
-// Add an event listener to hide the form after submission
 document.getElementById('targetUrlForm').addEventListener('htmx:afterRequest', function(event) {
-    // Hide the current form after the request is complete
     document.getElementById('targetUrlForm').style.display = 'none';
     document.getElementById('resultContainer').style.display = 'block';
 
@@ -15,7 +13,6 @@ document.getElementById('targetUrlForm').addEventListener('htmx:afterRequest', f
 document.body.addEventListener('htmx:afterSwap', function(event) {
     if (event.detail.target.id === 'resultDiv') {
         const returnedUrl = window.location.protocol + '//' + event.detail.target.textContent.trim();
-        const qrCodeDiv = document.getElementById('qrcode');
         const copyButton = document.getElementById('copyButton');
 
         copyButton.addEventListener('click', function() {
@@ -38,11 +35,7 @@ document.body.addEventListener('htmx:afterSwap', function(event) {
             });
         });
 
-        new QRCode(qrCodeDiv, {
-            text: returnedUrl,
-            width: 112,
-            height: 112
-        });
+        generateQRCode(128, returnedUrl);
 
         const options = {
             particleCount: 150,
@@ -56,8 +49,31 @@ document.body.addEventListener('htmx:afterSwap', function(event) {
     }
 });
 
-function resetForm() {
-    document.getElementById('targetUrlForm').style.display = 'block';
-    document.getElementById('targetUrl').value = '';
-    document.getElementById('resultContainer').style.display = 'none';
+document.getElementById('qrcode').addEventListener('click', function() {
+    const canvas = document.querySelector('canvas');
+    const url = canvas.toDataURL("image/png");
+    const link = document.createElement('a');
+    link.download = 'qrcode.png';
+    link.href = url;
+    link.click();
+});
+
+
+function generateQRCode(size, text) {
+    new QRCode(document.getElementById("qrcode"), {
+        text: text,
+        width: size,
+        height: size,
+        colorDark : "#000000",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H
+    });
+}
+
+function closeMobileMenu() {
+    document.getElementById('mobileMenu').style.display = 'none';
+}
+
+function openMobileMenu() {
+    document.getElementById('mobileMenu').style.display = 'block';
 }
