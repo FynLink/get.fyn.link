@@ -20,8 +20,13 @@ export const Home = html`<!doctype html>
 
     <link rel="manifest" href="site.webmanifest">
     <meta name="theme-color" content="#fafafa">
+    <link rel="stylesheet" href="/css/toastify.min.css">
     <link rel="stylesheet" href="/css/style.css">
     <script defer src="/js/htmx.min.js"></script>
+    <script defer src="/js/qrcode.min.js"></script>
+    <script defer src="/js/confetti.browser.min.js"></script>
+    <script defer src="/js/toastify-js.js"></script>
+    <script defer src="/js/app.js"></script>
 </head>
 <body>
 <div class="bg-white">
@@ -118,11 +123,11 @@ export const Home = html`<!doctype html>
             <div class="mt-12 flex items-center justify-center">
                 <div class="max-w-md w-full">
                     <div class="min-w-0 flex-1">
-                        <form data-hx-post="/url">
+                        <form id="targetUrlForm" data-hx-target="#resultDiv" data-hx-post="/url" >
                             <div class="border-b border-gray-200 focus-within:border-indigo-600">
                                 <label for="comment" class="sr-only">Target URL</label>
                                 <textarea rows="3" name="targetUrl" id="targetUrl"
-                                          class="block w-full resize-none border-0 border-b border-transparent p-0 pb-2 text-gray-900 placeholder:text-gray-400 focus:border-indigo-600 focus:ring-0 sm:text-sm sm:leading-6"
+                                          class="block w-full resize-none border-0 border-b border-transparent p-0 pb-2 text-gray-600 placeholder:text-gray-400 focus:border-indigo-600 focus:ring-0 sm:text-sm sm:leading-6"
                                           placeholder="Paste the target URL here..."></textarea>
                             </div>
                             <div class="flex justify-between pt-2">
@@ -158,6 +163,34 @@ export const Home = html`<!doctype html>
                                 </div>
                             </div>
                         </form>
+                        <div id="resultContainer" class="hidden">
+                            <div class="bg-white shadow sm:rounded-lg">
+                                <div class="px-4 py-5 sm:p-6">
+                                    <div>
+                                        <div class="rounded-md bg-gray-50 px-5 py-5 sm:flex sm:items-start sm:justify-between">
+                                            <h4 class="sr-only">Visa</h4>
+                                            <div class="sm:flex sm:items-start">
+                                                <div id="qrcode" >
+                                                    
+                                                </div>
+                                                <div class="mt-3 sm:ml-4 sm:mt-0">
+                                                    <div id="resultDiv" data-hx-target="#resultDiv" class="text-sm font-medium text-indigo-600"></div>
+                                                    <div class="mt-1 text-xs text-gray-500 sm:flex sm:items-center">
+                                                        <div>Expire on <span id="expiry-time"></span></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mt-4 sm:ml-6 sm:mt-0 sm:flex-shrink-0">
+                                                <button id="copyButton" type="button" class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">Copy</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div onclick="resetForm()" class="text-gray-500 underline cursor-pointer text-sm mt-5 text-center">
+                                Create new short URL
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

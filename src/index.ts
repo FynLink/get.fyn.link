@@ -9,6 +9,7 @@ import { HtmlEscapedString } from 'hono/utils/html'
 import { createLink, getLink } from "./services/linkService";
 import { HTTPException } from "hono/http-exception";
 import { csrf } from "hono/csrf";
+import {html} from "hono/html";
 
 export type Env = {
     KV: KVNamespace
