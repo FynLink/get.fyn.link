@@ -10,12 +10,16 @@ import { createLink, getLink } from "./services/linkService";
 import { HTTPException } from "hono/http-exception";
 import { csrf } from "hono/csrf";
 import { SafeMode } from "./pages/safemode";
+import {renderNotFound} from "./pages/notfound";
 
 export type Env = {
     KV: KVNamespace
     LINK_SHARED_SECRET: string
     SHORT_DOMAIN: string
     DEFAULT_LINK_TTL: number
+    LANDING_URL: string
+    GITHUB_URL: string
+    TWITTER_URL: string
 }
 
 const app = new Hono<{ Bindings: Env }>();
@@ -35,15 +39,16 @@ async function ssrTailwind(body: HtmlEscapedString | Promise<HtmlEscapedString>)
 }
 
 app.notFound((c) => {
-    return c.text('Custom 404 Not Found', 404)
+    return c.html(ssrTailwind(renderNotFound(c)))
 })
 
 app.onError((err, c) => {
-    console.error(`${err}`)
     if (err instanceof HTTPException) {
-        // Get the custom response
-        return err.getResponse()
+        if (err.status === 404) {
+            return c.html(ssrTailwind(renderNotFound(c)))
+        }
     }
+
     return c.text('Custom Error Message', 500)
 })
 
@@ -57,7 +62,7 @@ app.post('/url', async (c) => {
     return c.text(await createLink(c), 200)
 })
 app.get('/', (c) => {
-  return c.html(ssrTailwind(Home))
+  return c.html(ssrTailwind(Home(c)))
 })
 
 app.get('/:slug', async (c) => {
