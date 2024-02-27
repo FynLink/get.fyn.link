@@ -21,6 +21,7 @@ export type Env = {
     LANDING_URL: string
     GITHUB_URL: string
     TWITTER_URL: string
+    META_OG_IMAGE: string
 }
 
 const app = new Hono<{ Bindings: Env }>();

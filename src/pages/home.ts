@@ -1,26 +1,28 @@
 import { html } from "hono/html";
-import {Context} from "hono";
+import { Context } from "hono";
 
 export async function Home(c: Context) {
     return html`<!doctype html>
-    <html class="no-js" lang="">
+    <html class="no-js" lang="en-US">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>The best free URL shortener | By Fynlink</title>
+        <title>Free URL shortener | By Fynlink</title>
         <meta name="description" content="Private & free URL shortener with QR code.">
 
-        <meta property="og:title" content="">
-        <meta property="og:type" content="">
-        <meta property="og:url" content="">
-        <meta property="og:image" content="">
-        <meta property="og:image:alt" content="">
+        <meta property="og:title" content="Free private URl shortener - By FynLink">
+        <meta property="og:description" content="The best free & private URL shortener.">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="${c.env.LANDING_URL}">
+        <meta property="og:site_name" content="Get FynLink">
+        <meta property="og:image" content="${c.env.META_OG_IMAGE}">
+        <meta property="og:image:alt" content="Get FynLink">
 
         <link rel="icon" href="/favicon.ico" sizes="any">
         <link rel="icon" href="/icon.svg" type="image/svg+xml">
-        <link rel="apple-touch-icon" href="icon.png">
+        <link rel="apple-touch-icon" href="/icon.png">
 
-        <link rel="manifest" href="site.webmanifest">
+        <link rel="manifest" href="/site.webmanifest">
         <meta name="theme-color" content="#fafafa">
         <link rel="stylesheet" href="/css/toastify.min.css">
         <link rel="stylesheet" href="/css/style.css">
