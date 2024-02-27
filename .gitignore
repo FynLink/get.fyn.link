@@ -3,6 +3,7 @@ dist
 .wrangler
 .dev.vars
 .staging.vars
+.prod.vars
 .idea
 wrangler.toml
 
