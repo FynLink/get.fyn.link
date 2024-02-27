@@ -6,7 +6,7 @@ export async function renderError(errorCode: number) {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Something went wrong</title>
+        <title>Something went wrong | Error ${errorCode}</title>
     </head>
     <body class="h-full">
     <main class="grid min-h-full place-items-center bg-white px-6 py-24 sm:py-32 lg:px-8">
