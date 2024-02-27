@@ -3,7 +3,7 @@ document.getElementById('targetUrlForm').addEventListener('htmx:afterRequest', f
     document.getElementById('resultContainer').style.display = 'block';
 
     const currentTime = new Date();
-    const expiryTime = new Date(currentTime.getTime() + (24 * 60 * 60 * 1000));
+    const expiryTime = new Date(currentTime.getTime() + ( 2 * (24 * 60 * 60 * 1000)));
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'};
     const formattedExpiryDateTime = expiryTime.toLocaleString('en-US', options);
 

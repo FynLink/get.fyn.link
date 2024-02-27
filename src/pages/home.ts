@@ -63,9 +63,7 @@ export async function Home(c: Context) {
                             aria-hidden="true">&rarr;</span></a>
                 </div>
             </nav>
-            <!-- Mobile menu, show/hide based on menu open state. -->
             <div id="mobileMenu" class="hidden" role="dialog" aria-modal="true">
-                <!-- Background backdrop, show/hide based on slide-over state. -->
                 <div class="fixed inset-0 z-50"></div>
                 <div class="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
                     <div class="flex items-center justify-between">
@@ -112,7 +110,7 @@ export async function Home(c: Context) {
             <div class="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
                 <div class="mb-12 sm:mb-8 sm:flex sm:justify-center">
                     <div class="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
-                        Want more control for your short links? <a href="#" class="font-semibold text-indigo-600"><span
+                        Want more control for your short links? <a href="https://fyn.link/blog/posts/introducing-fynlink" class="font-semibold text-indigo-600"><span
                             class="absolute inset-0" aria-hidden="true"></span>Learn more <span
                             aria-hidden="true">&rarr;</span></a>
                     </div>
@@ -126,7 +124,7 @@ export async function Home(c: Context) {
                         privacy features by the <a href="https://fyn.link" class="text-indigo-600">people at FynLink</a>.
                         All links created are <a
                                 href="https://docs.fyn.link/help/private-link#how-is-a-private-link-stored-in-cache"
-                                class="text-indigo-600">private by default,</a> & will expire in 24 hours.</p>
+                                class="text-indigo-600">private by default,</a> & will expire in 48 hours.</p>
                 </div>
                 <div class="mt-24 sm:mt-16 flex items-center justify-center">
                     <div class="max-w-lg w-full">
