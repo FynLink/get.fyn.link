@@ -46,6 +46,8 @@ app.onError((err, c) => {
     if (err instanceof HTTPException) {
         if (err.status === 404) {
             return c.html(ssrTailwind(renderNotFound(c)))
+        } else if (err.status === 400) {
+            return c.text('Invalid input', 400)
         }
     }
 

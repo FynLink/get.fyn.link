@@ -1,6 +1,8 @@
 const urlInput = document.getElementById('targetUrl');
 const submitButton = document.getElementById('submitButton');
 const errorBlock = document.getElementById('errorBlock');
+const targetUrlForm = document.getElementById('targetUrlForm');
+
 urlInput.addEventListener('input', function() {
     const urlValue = this.value;
     const urlRegex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/;
@@ -13,7 +15,11 @@ urlInput.addEventListener('input', function() {
         submitButton.setAttribute('disabled', 'disabled');
     }
 });
-document.getElementById('targetUrlForm').addEventListener('htmx:afterRequest', function(event) {
+targetUrlForm.addEventListener('htmx:responseError', function(evt) {
+    window.location.href = "/";
+});
+
+targetUrlForm.addEventListener('htmx:afterRequest', function(event) {
     document.getElementById('targetUrlForm').style.display = 'none';
     document.getElementById('resultContainer').style.display = 'block';
 

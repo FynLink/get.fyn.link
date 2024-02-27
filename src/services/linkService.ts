@@ -19,17 +19,32 @@ export async function getLink(c: Context) {
 }
 
 export async function createLink(c: Context) : Promise<string> {
-
     const body: BodyData = await c.req.parseBody()
+
+    if (! checkIfValidUrl(<string>body.targetUrl)) {
+        throw new HTTPException(400)
+    }
+
     const slug: string = await Slug.Generate();
-    const shortUrl: string = c.env.SHORT_DOMAIN + '/' + slug;
-    const encryptionKey: CryptoKey = await Crypto.key(shortUrl, c.env.LINK_SHARED_SECRET);
+    const shortUrl: string = c.env.SHORT_DOMAIN + '/' + slug
+    const hashedShortUrl = await Crypto.hash(shortUrl)
+    const encryptionKey: CryptoKey = await Crypto.key(shortUrl, c.env.LINK_SHARED_SECRET)
+
+    if (await c.env.KV.get(hashedShortUrl)) {
+        throw new HTTPException(409)
+    }
 
     await c.env.KV.put(
-        await Crypto.hash(shortUrl),
+        hashedShortUrl,
         await Crypto.encrypt(<string>body.targetUrl, encryptionKey),
         <any>{ expiration_ttl: c.env.DEFAULT_LINK_TTL }
     )
 
     return shortUrl
+}
+
+function checkIfValidUrl(url: string) {
+    const urlRegex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/
+
+    return urlRegex.test(url)
 }
