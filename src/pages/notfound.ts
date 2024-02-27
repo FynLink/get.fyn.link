@@ -7,7 +7,7 @@ export async function renderNotFound(c: Context) {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Not Found</title>
+        <title>Not Found | 404</title>
     </head>
     <body class="h-full">
     <main class="grid min-h-full place-items-center bg-white px-6 lg:px-8">

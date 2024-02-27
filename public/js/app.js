@@ -1,3 +1,18 @@
+const urlInput = document.getElementById('targetUrl');
+const submitButton = document.getElementById('submitButton');
+const errorBlock = document.getElementById('errorBlock');
+urlInput.addEventListener('input', function() {
+    const urlValue = this.value;
+    const urlRegex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/;
+
+    if (urlRegex.test(urlValue)) {
+        errorBlock.style.display = 'none';
+        submitButton.removeAttribute('disabled');
+    } else {
+        errorBlock.style.display = 'block';
+        submitButton.setAttribute('disabled', 'disabled');
+    }
+});
 document.getElementById('targetUrlForm').addEventListener('htmx:afterRequest', function(event) {
     document.getElementById('targetUrlForm').style.display = 'none';
     document.getElementById('resultContainer').style.display = 'block';

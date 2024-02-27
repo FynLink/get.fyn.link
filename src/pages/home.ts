@@ -134,7 +134,7 @@ export async function Home(c: Context) {
                                     <label for="comment" class="sr-only">Target URL</label>
                                     <textarea rows="3" name="targetUrl" id="targetUrl"
                                               class="block w-full resize-none border-0 border-b border-transparent p-0 pb-2 text-gray-600 placeholder:text-gray-400 focus:border-indigo-600 focus:ring-0 sm:text-sm sm:leading-6"
-                                              placeholder="Paste the target URL here..."></textarea>
+                                              placeholder="Paste target URL here (Eg: https://example.com/very-long-url)"></textarea>
                                 </div>
                                 <div class="flex justify-between pt-2">
                                     <div class="flex items-center space-x-5">
@@ -162,10 +162,22 @@ export async function Home(c: Context) {
                                         </div>
                                     </div>
                                     <div class="flex-shrink-0">
-                                        <button type="submit"
+                                        <button disabled type="submit" id="submitButton"
                                                 class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                                             Create Short Link
                                         </button>
+                                    </div>
+                                </div>
+                                <div id="errorBlock" class="hidden rounded-md bg-red-50 p-4 mt-6">
+                                    <div class="flex">
+                                        <div class="flex-shrink-0">
+                                            <svg class="h-5 w-5 text-red-600" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
+                                            </svg>
+                                        </div>
+                                        <div class="ml-3">
+                                            <p class="text-sm font-medium text-red-600">Invalid target URL. Please enter a valid URL.</p>
+                                        </div>
                                     </div>
                                 </div>
                             </form>
