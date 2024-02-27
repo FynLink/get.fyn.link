@@ -11,6 +11,7 @@ import { HTTPException } from "hono/http-exception";
 import { csrf } from "hono/csrf";
 import { SafeMode } from "./pages/safemode";
 import {renderNotFound} from "./pages/notfound";
+import {renderError} from "./pages/error";
 
 export type Env = {
     KV: KVNamespace
@@ -44,14 +45,17 @@ app.notFound((c) => {
 
 app.onError((err, c) => {
     if (err instanceof HTTPException) {
+
         if (err.status === 404) {
-            return c.html(ssrTailwind(renderNotFound(c)))
+            return c.html(ssrTailwind(renderNotFound(c)), 404)
         } else if (err.status === 400) {
             return c.text('Invalid input', 400)
         }
+
+        return c.html(ssrTailwind(renderError(err.status)), err.status)
     }
 
-    return c.text('Custom Error Message', 500)
+    return c.html(ssrTailwind(renderError(500)), 500)
 })
 
 app.use('/*', serveStatic({ root: './', manifest }))
