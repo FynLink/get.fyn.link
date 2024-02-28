@@ -12,6 +12,8 @@ import { csrf } from "hono/csrf";
 import { SafeMode } from "./pages/safemode";
 import { renderNotFound } from "./pages/notfound";
 import { renderError } from "./pages/error";
+import { secureHeaders } from "hono/secure-headers";
+import { cache } from "hono/cache";
 
 export type Env = {
     KV: KVNamespace
@@ -23,8 +25,6 @@ export type Env = {
     TWITTER_URL: string
     META_OG_IMAGE: string
 }
-
-const app = new Hono<{ Bindings: Env }>();
 
 install(
     {
@@ -39,6 +39,18 @@ async function ssrTailwind(body: HtmlEscapedString | Promise<HtmlEscapedString>)
 
   return html.replace('</head>', `<style data-twind>${css}</style></head>`)
 }
+
+const app = new Hono<{ Bindings: Env }>();
+
+app.use(
+    '*',
+    secureHeaders({
+        xFrameOptions: 'DENY',
+        xXssProtection: '1',
+    })
+)
+
+app.use('/url', csrf())
 
 app.notFound((c) => {
     return c.html(ssrTailwind(renderNotFound(c)))
@@ -59,15 +71,17 @@ app.onError((err, c) => {
     return c.html(ssrTailwind(renderError(500)), 500)
 })
 
-app.use('/*', serveStatic({ root: './', manifest }))
-
-app.use('/url', csrf())
+app.get('/*', cache({
+    cacheName: 'public-assets',
+    cacheControl: 'max-age=3600',
+}), serveStatic({ root: './', manifest }))
 
 app.get('/favicon.ico', serveStatic({  path: './favicon.ico', manifest }))
 
 app.post('/url', async (c) => {
     return c.text(await createLink(c), 200)
 })
+
 app.get('/', (c) => {
   return c.html(ssrTailwind(Home(c)))
 })
