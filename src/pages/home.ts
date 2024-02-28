@@ -56,9 +56,9 @@ export async function Home(c: Context) {
                 <div class="hidden lg:flex lg:gap-x-12">
                     <a href="https://github.com/FynLink/get.fyn.link"
                        class="text-sm font-semibold leading-6 text-gray-900">Source</a>
-                    <a href="#" class="text-sm font-semibold leading-6 text-gray-900">Terms</a>
-                    <a href="#" class="text-sm font-semibold leading-6 text-gray-900">Privacy</a>
-                    <a href="#" class="text-sm font-semibold leading-6 text-gray-900">About</a>
+                    <a href="https://github.com/FynLink/get.fyn.link/blob/main/TERMS.md" class="text-sm font-semibold leading-6 text-gray-900">Terms</a>
+                    <a href="https://github.com/FynLink/get.fyn.link/blob/main/PRIVACY.md" class="text-sm font-semibold leading-6 text-gray-900">Privacy</a>
+                    <a href="https://github.com/FynLink/get.fyn.link/blob/main/ABOUT.md" class="text-sm font-semibold leading-6 text-gray-900">About</a>
                 </div>
                 <div class="hidden lg:flex lg:flex-1 lg:justify-end">
                     <a href="https://fyn.link" class="text-sm font-semibold leading-6 text-gray-900">Fyn.link <span
@@ -87,11 +87,11 @@ export async function Home(c: Context) {
                             <div class="space-y-2 py-6">
                                 <a href="https://github.com/FynLink/get.fyn.link"
                                    class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Source</a>
-                                <a href="#"
+                                <a href="https://github.com/FynLink/get.fyn.link/blob/main/TERMS.md"
                                    class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Terms</a>
-                                <a href="#"
+                                <a href="https://github.com/FynLink/get.fyn.link/blob/main/PRIVACY.md"
                                    class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Privacy</a>
-                                <a href="#"
+                                <a href="https://github.com/FynLink/get.fyn.link/blob/main/ABOUT.md"
                                    class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">About</a>
                             </div>
                             <div class="py-6">
@@ -110,15 +110,15 @@ export async function Home(c: Context) {
                      style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"></div>
             </div>
             <div class="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
-                <div class="mb-12 sm:mb-8 sm:flex sm:justify-center">
+                <div class="hidden mb-12 sm:mb-8 sm:flex sm:justify-center">
                     <div class="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
-                        Want more control for your short links? <a href="https://fyn.link/blog/posts/introducing-fynlink" class="font-semibold text-indigo-600"><span
+                        Want more control for your short URL? <a href="https://fyn.link/blog/posts/introducing-fynlink" class="font-semibold text-indigo-600"><span
                             class="absolute inset-0" aria-hidden="true"></span>Learn more <span
                             aria-hidden="true">&rarr;</span></a>
                     </div>
                 </div>
                 <div class="text-center">
-                    <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">The Best <span
+                    <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">The best <span
                             class="relative font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-cyan-400">Free & Private </span>URL
                         shortener!</h1>
                     <p class="hidden sm:block mt-6 text-lg leading-8 text-gray-600">This is a free & open source service
@@ -127,6 +127,7 @@ export async function Home(c: Context) {
                         All links created are <a
                                 href="https://docs.fyn.link/help/private-link#how-is-a-private-link-stored-in-cache"
                                 class="text-indigo-600">private by default,</a> & will expire in 48 hours.</p>
+                    <p class="sm:hidden mt-8 text-gray-500 text-md">Powered by <a class="text-indigo-500" href="https://fyn.link">FynLink</a></p>
                 </div>
                 <div class="mt-24 sm:mt-16 flex items-center justify-center">
                     <div class="max-w-lg w-full">
@@ -190,7 +191,7 @@ export async function Home(c: Context) {
                                             <div class="rounded-md bg-gray-50 px-5 py-5 sm:flex sm:items-start sm:justify-between">
                                                 <h4 class="sr-only">QR Code</h4>
                                                 <div class="sm:flex sm:items-start">
-                                                    <div id="qrcode" class="cursor-pointer">
+                                                    <div id="qrcode" class="hidden sm:block cursor-pointer">
 
                                                     </div>
                                                     <div class="mt-3 sm:ml-4 sm:mt-0">

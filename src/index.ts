@@ -10,8 +10,8 @@ import { createLink, getLink } from "./services/linkService";
 import { HTTPException } from "hono/http-exception";
 import { csrf } from "hono/csrf";
 import { SafeMode } from "./pages/safemode";
-import {renderNotFound} from "./pages/notfound";
-import {renderError} from "./pages/error";
+import { renderNotFound } from "./pages/notfound";
+import { renderError } from "./pages/error";
 
 export type Env = {
     KV: KVNamespace
