@@ -1,22 +1,16 @@
 name = "get-fyn-link"
 compatibility_date = "2023-12-01"
+compatibility_flags = [ "nodejs_compat" ]
 main = "src/index.ts"
 
 [site]
 bucket = "./public"
 
-# [vars]
-# MY_VARIABLE = "production_value"
+[env.production]
+vars = { SHORT_DOMAIN = "YOUR_SHORT_DOMAIN", LANDING_URL = "YOUR_LANDING_PAGE", GITHUB_URL = "https://github.com/FynLink", TWITTER_URL = "https://twitter.com/FynLinkHQ", META_OG_IMAGE = "https://r2.fyn.link/get.fyn.link.og.image.webp", DEFAULT_LINK_TTL = 172800 }
+kv_namespaces = [ { binding = "KV", id = "YOUR_KV_ID" } ]
 
-# [[kv_namespaces]]
-# binding = "MY_KV_NAMESPACE"
-# id = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
-# [[r2_buckets]]
-# binding = "MY_BUCKET"
-# bucket_name = "my-bucket"
-
-# [[d1_databases]]
-# binding = "DB"
-# database_name = "my-database"
-# database_id = ""
+[env.dev]
+vars = { SHORT_DOMAIN = "localhost:8787", LANDING_URL = "http://localhost:8787", GITHUB_URL = "https://github.com/FynLink", TWITTER_URL = "https://twitter.com/FynLinkHQ", META_OG_IMAGE = "https://r2.fyn.link/get.fyn.link.og.image.webp", DEFAULT_LINK_TTL = 172800 }
+kv_namespaces = [ { binding = "KV", id = "YOUR_KV_ID" } ]
