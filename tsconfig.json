@@ -8,7 +8,8 @@
       "ESNext"
     ],
     "types": [
-      "@cloudflare/workers-types"
+      "vitest/globals",
+      "@cloudflare/workers-types",
     ],
     "jsx": "react-jsx",
     "jsxImportSource": "hono/jsx"
