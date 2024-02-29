@@ -18,6 +18,13 @@ export async function Home(c: Context) {
         <meta property="og:image" content="${c.env.META_OG_IMAGE}">
         <meta property="og:image:alt" content="Get FynLink">
 
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:site" content="@FynLinkHQ">
+        <meta name="twitter:creator" content="@FynLinkHQ">
+        <meta name="twitter:title" content="Free private URl shortener - By FynLink">
+        <meta name="twitter:description" content="The best free, fast, private & open source URL shortener. No account required.">
+        <meta name="twitter:image" content="${c.env.META_OG_IMAGE}">
+
         <link rel="icon" href="/favicon.ico" sizes="any">
         <link rel="icon" href="/icon.svg" type="image/svg+xml">
         <link rel="apple-touch-icon" href="/icon.png">
