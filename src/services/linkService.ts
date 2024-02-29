@@ -37,7 +37,7 @@ export async function createLink(c: Context) : Promise<string> {
     await c.env.KV.put(
         hashedShortUrl,
         await Crypto.encrypt(<string>body.targetUrl, encryptionKey),
-        <any>{ expiration_ttl: c.env.DEFAULT_LINK_TTL }
+        <any>{ expirationTtl: c.env.DEFAULT_LINK_TTL }
     )
 
     return shortUrl
