@@ -73,7 +73,7 @@ app.onError((err, c) => {
 
 app.get('/*', cache({
     cacheName: 'public-assets',
-    cacheControl: 'max-age=3600',
+    cacheControl: 'max-age=604800',
 }), serveStatic({ root: './', manifest }))
 
 app.get('/favicon.ico', serveStatic({  path: './favicon.ico', manifest }))
