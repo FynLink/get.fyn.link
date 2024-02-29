@@ -2,10 +2,29 @@
 import manifest from '__STATIC_CONTENT_MANIFEST'
 import { Hono } from 'hono'
 import { serveStatic } from 'hono/cloudflare-workers'
-import { Home } from './home'
+import { Home } from './pages/home'
 import { extract, install } from '@twind/core'
 import presetTailwind from '@twind/preset-tailwind'
 import { HtmlEscapedString } from 'hono/utils/html'
+import { createLink, getLink } from "./services/linkService";
+import { HTTPException } from "hono/http-exception";
+import { csrf } from "hono/csrf";
+import { SafeMode } from "./pages/safemode";
+import { renderNotFound } from "./pages/notfound";
+import { renderError } from "./pages/error";
+import { secureHeaders } from "hono/secure-headers";
+import { cache } from "hono/cache";
+
+export type Env = {
+    KV: KVNamespace
+    LINK_SHARED_SECRET: string
+    SHORT_DOMAIN: string
+    DEFAULT_LINK_TTL: number
+    LANDING_URL: string
+    GITHUB_URL: string
+    TWITTER_URL: string
+    META_OG_IMAGE: string
+}
 
 install(
     {
@@ -21,18 +40,54 @@ async function ssrTailwind(body: HtmlEscapedString | Promise<HtmlEscapedString>)
   return html.replace('</head>', `<style data-twind>${css}</style></head>`)
 }
 
-const app = new Hono()
+const app = new Hono<{ Bindings: Env }>();
 
-app.use('/*', serveStatic({ root: './', manifest }))
+app.use(
+    '*',
+    secureHeaders({
+        xFrameOptions: 'DENY',
+        xXssProtection: '1',
+    })
+)
+
+app.use('/url', csrf())
+
+app.notFound((c) => {
+    return c.html(ssrTailwind(renderNotFound(c)))
+})
+
+app.onError((err, c) => {
+    if (err instanceof HTTPException) {
+
+        if (err.status === 404) {
+            return c.html(ssrTailwind(renderNotFound(c)), 404)
+        } else if (err.status === 400) {
+            return c.text('Invalid input', 400)
+        }
+
+        return c.html(ssrTailwind(renderError(err.status)), err.status)
+    }
+
+    return c.html(ssrTailwind(renderError(500)), 500)
+})
+
+app.get('/*', cache({
+    cacheName: 'public-assets',
+    cacheControl: 'max-age=604800',
+}), serveStatic({ root: './', manifest }))
 
 app.get('/favicon.ico', serveStatic({  path: './favicon.ico', manifest }))
 
-app.post('/url', (c) => {
-  const url =  c.req.parseBody()
-  return c.text('Test')
+app.post('/url', async (c) => {
+    return c.text(await createLink(c), 200)
 })
+
 app.get('/', (c) => {
-  return c.html(ssrTailwind(Home))
+  return c.html(ssrTailwind(Home(c)))
+})
+
+app.get('/:slug', async (c) => {
+    return c.html(ssrTailwind(SafeMode(c, await getLink(c))))
 })
 
 export default app
