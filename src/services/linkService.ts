@@ -7,15 +7,14 @@ import { HTTPException } from "hono/http-exception";
 export async function getLink(c: Context) {
     const slug: string = c.req.param('slug')
     const shortUrl: string = c.env.SHORT_DOMAIN + '/' + slug
-    const hashedShortUrl: string = await Crypto.hash(shortUrl);
-    const encryptionKey: CryptoKey = await Crypto.key(shortUrl, c.env.LINK_SHARED_SECRET)
+    const hashedShortUrl: string = await Crypto.sha256Hash(shortUrl)
     const encryptedTargetUrl = await c.env.KV.get(hashedShortUrl)
 
     if (!encryptedTargetUrl) {
         throw new HTTPException(404)
     }
 
-    return Crypto.decrypt(encryptedTargetUrl, encryptionKey)
+    return Crypto.aesDecrypt(encryptedTargetUrl, shortUrl)
 }
 
 export async function createLink(c: Context) : Promise<string> {
@@ -25,10 +24,9 @@ export async function createLink(c: Context) : Promise<string> {
         throw new HTTPException(400)
     }
 
-    const slug: string = await Slug.Generate();
+    const slug: string = await Slug.Generate()
     const shortUrl: string = c.env.SHORT_DOMAIN + '/' + slug
-    const hashedShortUrl = await Crypto.hash(shortUrl)
-    const encryptionKey: CryptoKey = await Crypto.key(shortUrl, c.env.LINK_SHARED_SECRET)
+    const hashedShortUrl = await Crypto.sha256Hash(shortUrl)
 
     if (await c.env.KV.get(hashedShortUrl)) {
         throw new HTTPException(409)
@@ -36,7 +34,7 @@ export async function createLink(c: Context) : Promise<string> {
 
     await c.env.KV.put(
         hashedShortUrl,
-        await Crypto.encrypt(<string>body.targetUrl, encryptionKey),
+        await Crypto.aesEncrypt(shortUrl, <string>body.targetUrl),
         <any>{ expirationTtl: c.env.DEFAULT_LINK_TTL }
     )
 

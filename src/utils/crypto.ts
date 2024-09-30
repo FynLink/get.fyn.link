@@ -1,68 +1,100 @@
-// @ts-ignore
-import { Buffer } from "node:buffer";
-
-export async function encrypt(data: string, key: CryptoKey): Promise<string> {
-    const iv = crypto.getRandomValues(new Uint8Array(16));
-    const encrypted = await crypto.subtle.encrypt({ name: 'AES-CBC', iv: iv }, key, new TextEncoder().encode(data));
-    const ivString = btoa(String.fromCharCode.apply(null, Array.from(iv)));
-    const encryptedString = btoa(String.fromCharCode.apply(null, Array.from(new Uint8Array(encrypted))));
-
-    return btoa(JSON.stringify({ iv: ivString, value: encryptedString }));
+function fromB64(b64: string): Uint8Array {
+  return Uint8Array.from(atob(b64), c => c.charCodeAt(0))
 }
 
-export async function decrypt(encrypted: string, key: CryptoKey): Promise<string>
-{
-    const decoded = JSON.parse(atob(encrypted));
-    const data = Buffer.from(decoded.value, 'base64');
-    const iv = await getIv(decoded.iv);
-    const decrypted: ArrayBuffer = await crypto.subtle.decrypt({ name: 'AES-CBC', iv: iv }, key, data.buffer);
-
-    return new TextDecoder().decode(decrypted);
+function fromUTF8(input: string): Uint8Array {
+  return new TextEncoder().encode(input)
 }
 
-export async function key(data: string, sharedKey: string): Promise<CryptoKey>
+function generateRandomSalt(): Uint8Array {
+    return crypto.getRandomValues(new Uint8Array(16))
+}
+
+async function generateKeyFromHKDF(inputString: string, salt: Uint8Array|ArrayBuffer): Promise<{ key: ArrayBuffer, salt: Uint8Array|ArrayBuffer }> {
+    const keyMaterial = await crypto.subtle.importKey(
+        "raw",
+        new TextEncoder().encode(inputString),
+        { name: "HKDF" },
+        false,
+        ["deriveBits"]
+    )
+    const key = await crypto.subtle.deriveBits(
+        {
+            name: "HKDF",
+            hash: "SHA-256",
+            salt: salt,
+            info: new TextEncoder().encode("key"),
+        },
+        keyMaterial,
+        256
+    )
+
+    return { key: key, salt: salt }
+}
+
+async function generateKey(data: string, ks: ArrayBuffer): Promise<CryptoKey>
 {
-    const hmac = await hmacHash(data, sharedKey);
+    const keyData = await generateKeyFromHKDF(data, ks)
+    const key: ArrayBuffer = keyData.key
 
     return await crypto.subtle.importKey(
         'raw',
-        hmac,
+        key,
         { name: 'AES-CBC', length: 256 },
         false,
         ['encrypt', 'decrypt']
-    );
+    )
 }
 
-export async function getIv(string: string): Promise<ArrayBuffer>
-{
-    const binaryString = atob(string);
-    const data = new Uint8Array(binaryString.length);
+async function encryptData(data: string, key: ArrayBuffer, iv: Uint8Array, salt: Uint8Array) : Promise<string> {
+    const keyForEncryption = await crypto.subtle.importKey(
+        "raw",
+        key,
+        { name: "AES-CBC" },
+        false,
+        ["encrypt"]
+    )
+    const encryptedData = await crypto.subtle.encrypt(
+        {
+            name: "AES-CBC",
+            iv: iv,
+        },
+        keyForEncryption,
+        new TextEncoder().encode(data)
+    )
+    const ivString = btoa(String.fromCharCode.apply(null, Array.from(iv)))
+    const encryptedString = btoa(String.fromCharCode.apply(null, Array.from(new Uint8Array(encryptedData))))
 
-    for (let i = 0; i < binaryString.length; i++) {
-        data[i] = binaryString.charCodeAt(i);
+    return btoa(JSON.stringify({ iv: ivString, ks: btoa(String.fromCharCode.apply(null, Array.from(salt))), value: encryptedString }))
+}
+
+export async function aesEncrypt(shortUrl: string, target: string) {
+    let keyData
+    let salt = generateRandomSalt()
+    const iv = crypto.getRandomValues(new Uint8Array(16))
+    try {
+        keyData = await generateKeyFromHKDF(shortUrl, salt)
+
+        return await encryptData(target, keyData.key, iv, salt)
+    } catch (error) {
+        console.log("Native Web Crypto API not available. Falling back to js-crypto-utils library.")
     }
-
-    return data.buffer;
 }
 
-export async function hash(string: string): Promise<string>
-{
-    const encoder = new TextEncoder();
-    const data = encoder.encode(string);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
+export async function aesDecrypt(encrypted: string, shortUrl: string): Promise<string> {
+  const decoded = JSON.parse(atob(encrypted))
+  const data = fromB64(decoded.value)
+  const iv = fromB64(decoded.iv)
+  const salt = fromB64(decoded.ks)
+  const key = await generateKey(shortUrl, salt)
+  const decrypted: ArrayBuffer = await crypto.subtle.decrypt({ name: 'AES-CBC', iv: iv }, key, data)
 
-    return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
+  return new TextDecoder().decode(decrypted)
 }
 
-export async function hmacHash(data: string, secret: string): Promise<ArrayBuffer> {
-    const key = await crypto.subtle.importKey(
-        'raw',
-        new TextEncoder().encode(secret),
-        { name: 'HMAC', hash: 'SHA-256' },
-        true,
-        ['sign', 'verify']
-    );
-
-    return await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(data));
+export async function sha256Hash(shortUrl: string): Promise<string> {
+    const inputBytes = fromUTF8(shortUrl)
+    const hashBuffer = await crypto.subtle.digest('SHA-256', inputBytes)
+    const hashArray = Array.from(new Uint8Array(hashBuffer))
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('')
 }
