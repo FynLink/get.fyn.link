@@ -13,7 +13,6 @@ import { SafeMode } from "./pages/safemode";
 import { renderNotFound } from "./pages/notfound";
 import { renderError } from "./pages/error";
 import { secureHeaders } from "hono/secure-headers";
-import { cache } from "hono/cache";
 
 export type Env = {
     KV: KVNamespace
@@ -71,10 +70,7 @@ app.onError((err, c) => {
     return c.html(ssrTailwind(renderError(500)), 500)
 })
 
-app.get('/*', cache({
-    cacheName: 'public-assets',
-    cacheControl: 'max-age=604800',
-}), serveStatic({ root: './', manifest }))
+app.get('/*', serveStatic({ root: './', manifest }))
 
 app.get('/favicon.ico', serveStatic({  path: './favicon.ico', manifest }))
 
