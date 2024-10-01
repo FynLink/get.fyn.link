@@ -21,19 +21,23 @@ export async function getLink(c: Context): Promise<Link> {
     let { value: linkData, metadata } = await c.env.KV.getWithMetadata(hashedShortUrl);
 
     if (!linkData) {
-        const { results } = await c.env.DB.prepare(
+        const result = await c.env.DB.prepare(
             "SELECT encryptedTarget, safeMode, ttl FROM links WHERE hashedShortUrl = ? AND expireAt > datetime('now')"
-        ).bind(hashedShortUrl).all();
+        ).bind(hashedShortUrl).first();
 
-        if (results.length === 0) {
+        if (!result) {
             throw new HTTPException(404, { message: "Link not found" });
         }
 
-        const { encryptedTarget, safeMode, ttl } = results[0];
+        const { encryptedTarget, safeMode, ttl } = result;
     
         linkData = encryptedTarget;
-        metadata = { safeMode: safeMode };
-        await c.env.KV.put(hashedShortUrl, encryptedTarget, { metadata: { safeMode: safeMode === 1 }, expirationTtl: ttl });
+        metadata = { safeMode: safeMode === 1 };
+
+        let options: KVNamespacePutOptions = { metadata: metadata }
+        options.expirationTtl = parseInt(ttl);
+
+        await c.env.KV.put(hashedShortUrl, encryptedTarget, options);
     }
 
     return {
@@ -54,11 +58,11 @@ export async function createLink(c: Context): Promise<string> {
     const slug: string = await Slug.Generate();
     const shortUrl: string = c.env.SHORT_DOMAIN + '/' + slug;
     const hashedShortUrl = await Crypto.sha256Hash(shortUrl);
-    const { results } = await c.env.DB.prepare(
+    const result = await c.env.DB.prepare(
         "SELECT hashedShortUrl FROM links WHERE hashedShortUrl = ?"
-    ).bind(hashedShortUrl).all();
+    ).bind(hashedShortUrl).first();
 
-    if (results.length > 0) {
+    if (result) {
         throw new HTTPException(409, { message: "Link already exists" });
     }
 
