@@ -121,12 +121,9 @@ export async function Home(c: Context) {
                     <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">The best <span
                             class="relative font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-cyan-400">Free & Private </span>URL
                         shortener!</h1>
-                    <p class="hidden sm:block mt-6 text-lg leading-8 text-gray-600">This is a free & open source service
-                        built with the same
-                        privacy features by the <a href="https://fyn.link" class="text-indigo-600">people at FynLink</a>.
-                        All links created are <a
+                    <p class="hidden sm:block mt-6 text-lg leading-8 text-gray-600">No account required. Free, fast, private & open source URL shortener. Short URL is stored as  <a
                                 href="https://docs.fyn.link/help/private-link#how-is-a-private-link-stored-in-cache"
-                                class="text-indigo-600">private by default,</a> & will expire in 48 hours.</p>
+                                class="text-indigo-600">hash value & target link is encrypted</a> using a unique key.</p>
                     <p class="sm:hidden mt-8 text-gray-500 text-md">Powered by <a class="text-indigo-500" href="https://fyn.link">FynLink</a></p>
                 </div>
                 <div class="mt-24 sm:mt-16 flex items-center justify-center">

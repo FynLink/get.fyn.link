@@ -6,7 +6,7 @@ import { Home } from './pages/home'
 import { extract, install } from '@twind/core'
 import presetTailwind from '@twind/preset-tailwind'
 import { HtmlEscapedString } from 'hono/utils/html'
-import { createLink, getLink } from "./services/linkService";
+import { createLink, getLink, Link } from "./services/linkService";
 import { HTTPException } from "hono/http-exception";
 import { csrf } from "hono/csrf";
 import { SafeMode } from "./pages/safemode";
@@ -15,7 +15,8 @@ import { renderError } from "./pages/error";
 import { secureHeaders } from "hono/secure-headers";
 
 export type Env = {
-    KV: KVNamespace
+    KV: KVNamespace,
+    DB: D1Database,
     LINK_SHARED_SECRET: string
     SHORT_DOMAIN: string
     DEFAULT_LINK_TTL: number
@@ -83,7 +84,13 @@ app.get('/', (c) => {
 })
 
 app.get('/:slug', async (c) => {
-    return c.html(ssrTailwind(SafeMode(c, await getLink(c))))
+    const link: Link = await getLink(c)
+
+    if (link.metadata?.safeMode === false) {
+        return c.redirect(link.targetUrl, 301)
+    }
+
+    return c.html(ssrTailwind(SafeMode(c, link.targetUrl)))
 })
 
 export default app

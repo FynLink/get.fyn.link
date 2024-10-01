@@ -9,8 +9,10 @@ bucket = "./public"
 [env.production]
 vars = { SHORT_DOMAIN = "YOUR_SHORT_DOMAIN", LANDING_URL = "YOUR_LANDING_PAGE", GITHUB_URL = "https://github.com/FynLink", TWITTER_URL = "https://twitter.com/FynLinkHQ", META_OG_IMAGE = "https://r2.fyn.link/get.fyn.link.og.image.webp", DEFAULT_LINK_TTL = 172800 }
 kv_namespaces = [ { binding = "KV", id = "YOUR_KV_ID" } ]
+d1_databases = [ { binding = "DB", database_name = "YOUR_DATABASE_NAME", database_id = "YOUR_D1_ID" } ]
 
 
 [env.dev]
 vars = { SHORT_DOMAIN = "localhost:8787", LANDING_URL = "http://localhost:8787", GITHUB_URL = "https://github.com/FynLink", TWITTER_URL = "https://twitter.com/FynLinkHQ", META_OG_IMAGE = "https://r2.fyn.link/get.fyn.link.og.image.webp", DEFAULT_LINK_TTL = 172800 }
 kv_namespaces = [ { binding = "KV", id = "YOUR_KV_ID" } ]
+d1_databases = [ { binding = "DB", database_name = "YOUR_DATABASE_NAME", database_id = "YOUR_D1_ID" } ]
