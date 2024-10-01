@@ -3,9 +3,8 @@ CREATE TABLE links (
     hashedShortUrl TEXT PRIMARY KEY,
     encryptedTarget TEXT NOT NULL,
     safeMode INTEGER NOT NULL,
-    createdAt TEXT NOT NULL,
-    ttl INTEGER NOT NULL,
-    expireAt TEXT NOT NULL
+    createdAt INTEGER NOT NULL, -- Using INTEGER for UNIX timestamp
+    expireAt INTEGER NOT NULL -- Using INTEGER for UNIX timestamp
 );
 
 -- Create index on hashedShortUrl

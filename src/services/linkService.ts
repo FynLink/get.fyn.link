@@ -21,23 +21,28 @@ export async function getLink(c: Context): Promise<Link> {
     let { value: linkData, metadata } = await c.env.KV.getWithMetadata(hashedShortUrl);
 
     if (!linkData) {
+        const currentUnixTimestamp = Math.floor(Date.now() / 1000);
         const result = await c.env.DB.prepare(
-            "SELECT encryptedTarget, safeMode, ttl FROM links WHERE hashedShortUrl = ? AND expireAt > datetime('now')"
-        ).bind(hashedShortUrl).first();
+            "SELECT encryptedTarget, safeMode, expireAt FROM links WHERE hashedShortUrl = ? AND expireAt > ?"
+        ).bind(hashedShortUrl, currentUnixTimestamp).first();
 
         if (!result) {
-            throw new HTTPException(404, { message: "Link not found" });
+            throw new HTTPException(404, { message: "Link not found or expired" });
         }
 
-        const { encryptedTarget, safeMode, ttl } = result;
+        const { encryptedTarget, safeMode, expireAt } = result;
     
         linkData = encryptedTarget;
         metadata = { safeMode: safeMode === 1 };
 
-        let options: KVNamespacePutOptions = { metadata: metadata }
-        options.expirationTtl = parseInt(ttl);
-
-        await c.env.KV.put(hashedShortUrl, encryptedTarget, options);
+        try {
+            await c.env.KV.put(hashedShortUrl, encryptedTarget, { 
+                expiration: Math.floor(new Date(expireAt).getTime() / 1000), 
+                metadata: metadata 
+            });
+        } catch (e) {
+            console.error(e);
+        }
     }
 
     return {
@@ -68,13 +73,12 @@ export async function createLink(c: Context): Promise<string> {
 
     const encryptedTarget = await Crypto.aesEncrypt(shortUrl, <string>body.targetUrl);
     const safeMode = 1;
-    const createdAt = new Date().toISOString();
-    const ttl = c.env.DEFAULT_LINK_TTL;
-    const expireAt = new Date(Date.now() + ttl * 1000).toISOString();
+    const createdAt = Math.floor(Date.now() / 1000);
+    const expireAt = createdAt + c.env.DEFAULT_LINK_TTL;
 
     await c.env.DB.prepare(
-        "INSERT INTO links (hashedShortUrl, encryptedTarget, safeMode, createdAt, ttl, expireAt) VALUES (?, ?, ?, ?, ?, ?)"
-    ).bind(hashedShortUrl, encryptedTarget, safeMode, createdAt, ttl, expireAt).run();
+        "INSERT INTO links (hashedShortUrl, encryptedTarget, safeMode, createdAt, expireAt) VALUES (?, ?, ?, ?, ?)"
+    ).bind(hashedShortUrl, encryptedTarget, safeMode, createdAt, expireAt).run();
 
     return shortUrl;
 }
