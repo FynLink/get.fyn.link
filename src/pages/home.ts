@@ -31,6 +31,22 @@ export async function Home(c: Context) {
         <script defer src="/js/confetti.browser.min.js"></script>
         <script defer src="/js/toastify-js.js"></script>
         <script defer src="/js/app.js"></script>
+        <style>
+            .spinner {
+                border: 2px solid #f3f3f3;
+                border-top: 2px solid #3498db;
+                border-radius: 50%;
+                width: 16px;
+                height: 16px;
+                animation: spin 1s linear infinite;
+                display: inline-block;
+                margin-right: 8px;
+            }
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+        </style>
     </head>
     <body>
     <div class="bg-white">
@@ -112,8 +128,8 @@ export async function Home(c: Context) {
             <div class="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
                 <div class="hidden mb-12 sm:mb-8 sm:flex sm:justify-center">
                     <div class="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
-                        Want more control for your short URL? <a href="https://fyn.link/blog/posts/introducing-fynlink" class="font-semibold text-indigo-600"><span
-                            class="absolute inset-0" aria-hidden="true"></span>Learn more <span
+                        Want more control for your short URL? <a href="https://fyn.link" target="_blank" rel="noopener noreferrer" class="font-semibold text-indigo-600"><span
+                            class="absolute inset-0" aria-hidden="true"></span>Join FynLink <span
                             aria-hidden="true">&rarr;</span></a>
                     </div>
                 </div>
@@ -122,14 +138,14 @@ export async function Home(c: Context) {
                             class="relative font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-cyan-400">Free & Private </span>URL
                         shortener!</h1>
                     <p class="hidden sm:block mt-6 text-lg leading-8 text-gray-600">No account required. Free, fast, private & open source URL shortener. Short URL is stored as  <a
-                                href="https://docs.fyn.link/help/private-link#how-is-a-private-link-stored-in-cache"
+                                href="https://docs.fyn.link/help/private-link#how-is-a-private-link-stored-in-cache" target="_blank" rel="noopener noreferrer"
                                 class="text-indigo-600">hash value & target link is encrypted</a> using a unique key.</p>
                     <p class="sm:hidden mt-8 text-gray-500 text-md">Powered by <a class="text-indigo-500" href="https://fyn.link">FynLink</a></p>
                 </div>
                 <div class="mt-24 sm:mt-16 flex items-center justify-center">
                     <div class="max-w-lg w-full">
                         <div class="min-w-0 flex-1">
-                            <form id="targetUrlForm" data-hx-target="#resultDiv" data-hx-post="/url">
+                            <form id="targetUrlForm" data-hx-target="#resultDiv" data-hx-post="/url" hx-indicator="#spinner">
                                 <div class="border-b border-gray-200 focus-within:border-indigo-600">
                                     <label for="comment" class="sr-only">Target URL</label>
                                     <textarea rows="3" name="targetUrl" id="targetUrl"
@@ -164,7 +180,7 @@ export async function Home(c: Context) {
                                     <div class="flex-shrink-0">
                                         <button disabled type="submit" id="submitButton"
                                                 class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                                            Create Short Link
+                                            <span id="spinner" class="htmx-indicator spinner"></span><span>Create Short Link</span>
                                         </button>
                                     </div>
                                 </div>
