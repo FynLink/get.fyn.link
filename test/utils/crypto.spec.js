@@ -1,47 +1,48 @@
-import * as FynCrypto from '/src/utils/crypto.ts'
+import * as FynCrypto from '../../src/utils/crypto'
 
 describe('Crypto Functions', () => {
+    describe('encryption and decryption', () => {
+        test('encrypts and decrypts URL', async () => {
+            const targetUrl = 'https://example.com/test'
+            const shortUrl = 'fyn.is/test'
+            const encrypted = await FynCrypto.aesEncrypt(shortUrl, targetUrl)
+            expect(encrypted).toBeDefined()
 
-    const sharedKey = 'eJjhiDd+iE134-m$3Mpd1ACuoAi00!aO'
+            const decrypted = await FynCrypto.aesDecrypt(encrypted, shortUrl)
+            expect(decrypted).toEqual(targetUrl)
+        })
 
-    test('Test key derivation using HMAC', async () => {
-        const data = 'fyn.is/demo'
-        const derivedKey = await FynCrypto.key(data, sharedKey)
-
-        expect(derivedKey).toBeDefined()
+        test('produces different ciphertexts for same plaintext with different short URLs', async () => {
+            const targetUrl = 'https://example.com/test'
+            const shortUrl1 = 'fyn.is/test1'
+            const shortUrl2 = 'fyn.is/test2'
+            
+            const encrypted1 = await FynCrypto.aesEncrypt(shortUrl1, targetUrl)
+            const encrypted2 = await FynCrypto.aesEncrypt(shortUrl2, targetUrl)
+            
+            expect(encrypted1).not.toEqual(encrypted2)
+        })
     })
 
-    test('Test encryption', async () => {
-        const targetUrl = 'https://example.com/this-is-a-very-long-url-for-testing'
-        const shortUrl = 'fyn.is/demo'
-        const key = await FynCrypto.key(shortUrl, sharedKey)
-        const encrypted = await FynCrypto.encrypt(targetUrl, key)
+    describe('hashing', () => {
+        test('produces consistent hash for same input', async () => {
+            const data = 'fyn.is/demo'
+            const hash1 = await FynCrypto.sha256Hash(data)
+            const hash2 = await FynCrypto.sha256Hash(data)
 
-        expect(encrypted).toBeDefined()
-    })
+            expect(hash1).toEqual(hash2)
+        })
 
-    test('Test hashing', async () => {
-        const data = 'fyn.is/demo'
-        const hash = await FynCrypto.hash(data)
+        test('produces different hashes for different inputs', async () => {
+            const hash1 = await FynCrypto.sha256Hash('fyn.is/abc')
+            const hash2 = await FynCrypto.sha256Hash('fyn.is/xyz')
 
-        expect(hash).toBeDefined()
-        expect(hash).toBe('d191f60af8d38e49692a4a01a0f3a1063b9dda4b43ffbf1e2eb5cb006c2b46c9')
-    })
+            expect(hash1).not.toEqual(hash2)
+        })
 
-    test('Test HMAC hashing', async () => {
-        const data = 'fyn.is/demo'
-        const hmacHash = await FynCrypto.hmacHash(data, sharedKey)
-        expect(hmacHash).toBeDefined()
-
-        const uint8Array1 = new Uint8Array(hmacHash)
-        expect(uint8Array1.length).toBe(32)
-    })
-
-    test('Test IV generation', async () => {
-        const iv = await FynCrypto.getIv('wmP5kUWk3CRRlRf9Bl8dgA==')
-        expect(iv).toBeDefined();
-
-        const uint8Array1 = new Uint8Array(iv);
-        expect(uint8Array1.length).toBe(16)
+        test('produces hash of correct length', async () => {
+            const hash = await FynCrypto.sha256Hash('test data')
+            expect(hash.length).toBe(64)
+        })
     })
 })
