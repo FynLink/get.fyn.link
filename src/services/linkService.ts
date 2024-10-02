@@ -38,7 +38,7 @@ export async function getLink(c: Context): Promise<Link> {
 
         try {
             await c.env.KV.put(hashedShortUrl, encryptedTarget, { 
-                expiration: Math.floor(new Date(expireAt).getTime() / 1000), 
+                expiration: expireAt, 
                 metadata: metadata 
             });
         } catch (e) {
