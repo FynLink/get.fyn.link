@@ -3,6 +3,7 @@ import { BodyData } from "hono/utils/body";
 import * as Crypto from '../utils/crypto';
 import * as Slug from '../utils/slug';
 import { HTTPException } from "hono/http-exception";
+import { allShorteners } from '../utils/shorteners';
 
 export interface Link {
     targetUrl: string
@@ -45,8 +46,17 @@ export async function getLink(c: Context): Promise<Link> {
         }
     }
 
+    const targetUrl = await Crypto.aesDecrypt(linkData, shortUrl);
+
+    const urlObj = new URL(targetUrl);
+    const domain = urlObj.hostname.toLowerCase();
+
+    if (allShorteners().includes(domain)) {
+        throw new HTTPException(400, { message: "The link target cannot be a short URL" });
+    }
+
     return {
-        targetUrl: await Crypto.aesDecrypt(linkData, shortUrl),
+        targetUrl: targetUrl,
         metadata: {
             safeMode: metadata.safeMode
         }
