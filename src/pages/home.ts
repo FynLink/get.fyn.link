@@ -244,7 +244,8 @@ export async function Home(c: Context) {
                                     <span>Firefox Add-ons</span>
                                 </a>
                             </div>
-                            <p class="mt-4 text-sm text-gray-500 px-4 sm:px-0 text-center">Get our browser extension, no account or API key required. </p>
+                            <p class="mt-4 text-sm text-gray-500 px-4 sm:px-0 text-center">Get our browser extension for more customization options </p>
+                            <p class="mt-1 text-sm text-gray-500 px-4 sm:px-0 text-center">No account or API key required</p>
                         </div>
                     </div>
                 </div>
