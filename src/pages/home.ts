@@ -119,13 +119,13 @@ export async function Home(c: Context) {
                 </div>
             </div>
         </header>
-        <div class="relative mt-8 isolate px-6 lg:px-8">
+        <div class="relative isolate px-6 lg:px-8">
             <div class="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
                  aria-hidden="true">
                 <div class="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
                      style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"></div>
             </div>
-            <div class="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
+            <div class="mx-auto max-w-2xl py-24 sm:py-36 lg:py-48">
                 <div class="hidden mb-12 sm:mb-8 sm:flex sm:justify-center">
                     <div class="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
                         Want more control for your short URL? <a href="https://fyn.link" target="_blank" rel="noopener noreferrer" class="font-semibold text-indigo-600"><span
@@ -134,13 +134,12 @@ export async function Home(c: Context) {
                     </div>
                 </div>
                 <div class="text-center">
-                    <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">The best <span
+                    <h1 class="text-3xl sm:text-4xl font-bold tracking-tight text-gray-900 lg:text-6xl">The best <span
                             class="relative font-extrabold text-transparent bg-clip-text bg-gradient-to-br from-indigo-500 via-purple-500 to-cyan-400">Free & Private </span>URL
                         shortener!</h1>
-                    <p class="hidden sm:block mt-6 text-lg leading-8 text-gray-600">No account required. Free, fast, private & open source URL shortener. Short URL is stored as  <a
+                    <p class="mt-6 text-base sm:text-lg leading-7 sm:leading-8 text-gray-600 px-4 sm:px-0">No account required. Free, fast, private & open source URL shortener. Short URL is stored as  <a
                                 href="https://docs.fyn.link/help/private-link#how-is-a-private-link-stored-in-cache" target="_blank" rel="noopener noreferrer"
                                 class="text-indigo-600">hash value & target link is encrypted</a> using a unique key.</p>
-                    <p class="sm:hidden mt-8 text-gray-500 text-md">Powered by <a class="text-indigo-500" href="https://fyn.link">FynLink</a></p>
                 </div>
                 <div class="mt-24 sm:mt-16 flex items-center justify-center">
                     <div class="max-w-lg w-full">
@@ -180,7 +179,7 @@ export async function Home(c: Context) {
                                     <div class="flex-shrink-0">
                                         <button disabled type="submit" id="submitButton"
                                                 class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                                            <span id="spinner" class="htmx-indicator spinner"></span><span>Create Short Link</span>
+                                            <span id="spinner" class="htmx-indicator spinner hidden"></span>Create Short Link
                                         </button>
                                     </div>
                                 </div>
@@ -230,6 +229,22 @@ export async function Home(c: Context) {
                                     <a href="/">Create new short URL</a>
                                 </div>
                             </div>
+                            <!-- Browser Extension Buttons -->
+                            <div class="mt-12 flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 px-4 sm:px-0 max-w-5xl mx-auto">
+                                <a href="https://chrome.google.com/webstore/detail/efgnapmffnnnddillgmidpfpchdikmii" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 min-w-[240px] whitespace-nowrap">
+                                    <img src="/images/chrome-logo.png" alt="Chrome" class="h-5 w-5 mr-2">
+                                    <span>Chrome Web Store</span>
+                                </a>
+                                <a href="https://microsoftedge.microsoft.com/addons/detail/onmkncmhdgpkejegpomfpddeegfmhkkm" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 min-w-[240px]">
+                                    <img src="/images/edge-logo.png" alt="Edge" class="h-5 w-5 mr-2">
+                                    <span>Edge Add-ons</span>
+                                </a>
+                                <a href="https://addons.mozilla.org/en-US/firefox/addon/fynlink-private-url-shortener/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 min-w-[240px]">
+                                    <img src="/images/firefox-logo.png" alt="Firefox" class="h-5 w-5 mr-2">
+                                    <span>Firefox Add-ons</span>
+                                </a>
+                            </div>
+                            <p class="mt-4 text-sm text-gray-500 px-4 sm:px-0 text-center">Get our browser extension, no account or API key required. </p>
                         </div>
                     </div>
                 </div>
