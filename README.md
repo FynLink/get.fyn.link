@@ -2,7 +2,7 @@
 
 The free, fast, private & open source URL shortener. 
 
-[https://get.fyn.link](https://get.fyn.link)
+[https://create.fyn.link](https://create.fyn.link)
 
 
 ## Tech stack
